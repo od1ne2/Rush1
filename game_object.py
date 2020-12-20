@@ -8,6 +8,8 @@ class Player(pygame.sprite.Sprite):
         # Загружаем изображение спрайта
         self.image = pygame.image.load(img).convert_alpha()
         pygame.transform.flip(self.image, True, False)
+        self.image_left = pygame.image.load('hero_mini_l.png')
+        self.image_right = pygame.image.load('hero_mini.png')
         # Задаем положение спрайта игрока на экране
         self.rect = self.image.get_rect()
         self.rect.y = y
@@ -18,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.platforms = pygame.sprite.Group()
         self.artifacts = pygame.sprite.Group()
         self.score = 0
-        self.lives = 5
+        self.lives = 3
 
 
     def update(self):
@@ -99,15 +101,15 @@ class Player(pygame.sprite.Sprite):
     def go_left(self):
         """ Called when the user hits the left arrow. """
         self.change_x = -6
-
+        self.image = self.image_left
     def go_right(self):
         """ Called when the user hits the right arrow. """
         self.change_x = 6
+        self.image = self.image_right
 
     def stop(self):
         """ Called when the user lets off the keyboard. """
         self.change_x = 0
-
 
 class Platform(pygame.sprite.Sprite):
     images = ['ground01.png', 'ground02.png']

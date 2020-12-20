@@ -1,4 +1,4 @@
-import  constants
+import constants
 class Level:
     def __init__(self, filename="Levels.txt"):
         # список уровней
@@ -43,6 +43,7 @@ class Level:
 
         self.platform_coords = []
         self.artifact_coords = []
+        self.enemies_coords = []
         # начальное положение игрока
         startX = 0
         startY = 0
@@ -61,6 +62,8 @@ class Level:
                     # получаем координаты расположения артефакта
                     self.artifact_coords.append([sym_num * 40, line_num * 40 ])
                 if symbol == "@":
+                    self.enemies_coords.append([sym_num * 40, line_num * 40 ])
+                if symbol == "+":
                     # получаем координаты начального положения игрока
                     startX = sym_num * 40
                     startY = line_num * 40

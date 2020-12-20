@@ -1,17 +1,17 @@
+
 import pygame
 import game_object
 from constants import *
 from game_menu import *
-from level import *
-
 
 class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode([WIN_WIDTH, WIN_HEIGHT])
-        pygame.display.set_caption('Test')
-        self.background_img = pygame.image.load("background.png").convert()
+        pygame.display.set_caption('Rush')
+        self.background_img = pygame.image.load("background_wide.png").convert()
         self.all_sprite_list = pygame.sprite.Group()
+
 
         # Скорость движения врагов по умолчанию
         self.speed = 2
@@ -151,7 +151,7 @@ class Game:
         enemies_coords = [
             [0, 300, 400],
             [450, 550, 750],
-            [1200, 550, 1350]
+
         ]
         for coord in enemies_coords:
             enemy = game_object.Enemy(coord[0], coord[1], self.speed)
@@ -187,7 +187,7 @@ class Game:
 
             if active_button:
                 # После того, как на кнопку нажали, возвращаем ее состояние в "normal":
-                active_button.state = 'normal'
+                active_button.state =  'normal'
 
                 # Нажали на кнопку START, начинаем игру заново:
                 if active_button.name == 'START':
@@ -214,7 +214,7 @@ class Game:
                 # Проверяем кнопки подтверждения или выбора скорости
                 if active_button.name in ['OK', 'CANCEL']:
                     # После того, как на кнопку нажали, возвращаем ее состояние в "normal":
-                    active_button.state = 'normal'
+                    active_button.state =  'normal'
                     if active_button.name == 'OK':
                         # Изменяем скорость врагов в соответствии с тем что выбрали
                         for enemy in self.enemy_list:
@@ -232,6 +232,9 @@ class Game:
                     # Нажали на кнопку SLOW, меняем скорость движения врагов:
                     elif active_button.name == 'EASY':
                         self.speed = 2
+        elif self.state == 'FINISH':
+            pass
+
 
         # Обработка событий, когда идет игра
         elif self.state == 'GAME':
@@ -250,6 +253,7 @@ class Game:
                     self.player.stop()
                 elif event.key == pygame.K_ESCAPE:
                     self.state = 'MENU'
+
 
     # Прорисовка сцены
     def draw(self):
@@ -279,17 +283,19 @@ class Game:
             # Заливаем фон
             self.screen.blit(pygame.image.load("background.png").convert(), [0, 0])
             # Создаем и отображаем надпись
-            self.label = FONT.render('CONGRATILATIONS', True, YELLOW)
+            self.label = FONT.render('CONGRATILATIONS' , True, )
             self.screen.blit(self.label, [WIN_WIDTH / 2, WIN_HEIGHT / 2])
         elif self.state == 'GAME OVER':
             # Заливаем фон
             self.screen.blit(pygame.image.load("background.png").convert(), [0, 0])
             # Создаем и отображаем надпись
-            self.label = FONT.render('GAME OVER', True, YELLOW)
+            self.label = FONT.render('GAME OVER' , True, YELLOW)
             self.screen.blit(self.label, [WIN_WIDTH / 2, WIN_HEIGHT / 2])
 
     # Обновление текущего состояния игры
     def update(self):
+        print(self.player.rect.x)
+        print(self.player.rect.y)
         # Если идет игра, обновляем все объекты в игре:
         if self.state == 'GAME':
             self.time += 1
@@ -307,7 +313,7 @@ class Game:
                 self.player.change_x = -5
 
             # Проверяем, не достиг ли персонаж выхода:
-            if self.player.rect.x > WIN_WIDTH - 70 and self.player.rect.y > WIN_HEIGHT - 70:
+            if self.player.rect.x > WIN_WIDTH - 80 and self.player.rect.y > WIN_HEIGHT - 80:
                 self.state = 'FINISH'
 
             # Проверяем остаток жизней у игрока:
@@ -318,12 +324,15 @@ class Game:
         elif self.state == 'SETTINGS':
 
             self.settings_menu.update()
-            # Если игра на паузе или на старте, обновляем  меню:
+        # Если игра на паузе или на старте, обновляем  меню:
         else:
             self.main_menu.update()
 
+
     def run(self):
         done = False
+        print(self.player.rect.x)
+        print(self.player.rect.y)
         # Запустили главный игровой цикл:
         while not done:
             for event in pygame.event.get():
@@ -331,6 +340,11 @@ class Game:
                     done = True
                 # Обрабатываем события для разных состояний:
                 self.handle_states(event)
+                if self.player.rect.x > WIN_WIDTH - 70 and self.player.rect.y > WIN_HEIGHT - 70:
+                    self.state = "FINISH"
+                    done = True
+
+
 
             # Если игрок приближается к правому краю экрана, смещаем мир влево на (-x)
             if self.player.rect.right >= 500 and abs(self.shift) < self.game_width - WIN_WIDTH:
@@ -350,7 +364,6 @@ class Game:
             pygame.display.flip()
             self.clock.tick(60)
         pygame.quit()
-
 
 game = Game()
 game.run()
