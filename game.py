@@ -283,7 +283,7 @@ class Game:
             # Заливаем фон
             self.screen.blit(pygame.image.load("background.png").convert(), [0, 0])
             # Создаем и отображаем надпись
-            self.label = FONT.render('CONGRATILATIONS' , True, )
+            self.label = FONT.render('CONGRATILATIONS' , True, YELLOW)
             self.screen.blit(self.label, [WIN_WIDTH / 2, WIN_HEIGHT / 2])
         elif self.state == 'GAME OVER':
             # Заливаем фон
